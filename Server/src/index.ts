@@ -26,7 +26,6 @@ const swaggerDocument = YAML.parse(file)
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.refreshTokensIndex()
-  databaseService.videoStatusIndex()
   databaseService.followersIndex()
 })
 const app = express()
