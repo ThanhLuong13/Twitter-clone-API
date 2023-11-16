@@ -3,7 +3,6 @@ import 'dotenv/config'
 import User from '~/models/schemas/Users.schema'
 import Follower from '~/models/schemas/Follower.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
-import VideoStatus from '~/models/schemas/VideoStatus.schema'
 import { Tweet } from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import Bookmark from '~/models/schemas/Bookmark.schema'
@@ -50,15 +49,6 @@ class DatabaseService {
     }
   }
 
-  async videoStatusIndex() {
-    const isExisted = await this.videoStatus.indexExists(['exp_1', 'name_1'])
-
-    if (!isExisted) {
-      this.videoStatus.createIndex({ name: 1 })
-      this.videoStatus.createIndex({ exp: 1 }, { expireAfterSeconds: 0 }) // Xoa token khi het han
-    }
-  }
-
   async followersIndex() {
     const isExisted = await this.followers.indexExists(['user_id_1_followed_user_id_1'])
 
@@ -75,9 +65,6 @@ class DatabaseService {
   }
   get followers(): Collection<Follower> {
     return this.db.collection(envConfig.dbFollowersCollection)
-  }
-  get videoStatus(): Collection<VideoStatus> {
-    return this.db.collection(envConfig.dbVideoStatusCollection)
   }
   get tweet(): Collection<Tweet> {
     return this.db.collection(envConfig.dbTweetCollection)
