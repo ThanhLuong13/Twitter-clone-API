@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.chat {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.message-container {
+    display: flex;
+}
+
+.message {
+    max-width: 30%;
+    word-break: break-all;
+    text-align: left;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.message-right {
+    margin-left: 65%;
+}
+
+.message-left {
+    margin-left: 5%;
+}

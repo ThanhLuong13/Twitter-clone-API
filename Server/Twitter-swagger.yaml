@@ -1,0 +1,982 @@
+openapi: 3.0.3
+info:
+  title: Twitter API
+  description: ''
+  contact:
+    email: apiteam@swagger.io
+  version: 1.0.11
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: user
+    description: Operations about user
+  - name: tweet
+    description: Everything about tweet
+paths:
+  ####### Register #######
+  /users/register:
+    post:
+      tags:
+        - user
+      summary: Register new user
+      description: ''
+      operationId: register
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+        required: true
+      responses:
+        default:
+          description: Register Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Register Successfully
+                $ref: '#/components/schemas/RegisterSuccess'
+
+  ####### Login #######
+  /users/login:
+    post:
+      tags:
+        - user
+      summary: Log user into system
+      description: ''
+      operationId: login
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        default:
+          description: Login Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successfully
+                $ref: '#/components/schemas/LoginSuccess'
+
+    ####### Refresh token #######
+  /users/refresh-token:
+    post:
+      tags:
+        - user
+      summary: Refresh token when access token expired
+      description: ''
+      operationId: Refresh token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwODU5MDE2MH0.hXi8SquqppffVDzXEkvCwXd9Una8YcatsG1H-BlcRWw'
+        required: true
+      responses:
+        default:
+          description: Refresh token successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Refresh token successfully
+                  result:
+                    type: object
+                    properties:
+                      new_access_token:
+                        type: string
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MDAwMjE3MzMsImV4cCI6MTcwMDYyNjUzM30.URdW5H5nPvI1U4RlHJmDgGGTVlcXzqIMvwHTM7eS33k'
+                      new_refresh_token:
+                        type: string
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJleHAiOjE3MDg2NjE3MzAsImlhdCI6MTcwMDAyMTczM30.PARNjuBQjmy4ryTywaJyiSsXy6gsXxJfaCqDfQBo6OQ'
+
+    ####### Logout #######
+  /users/logout:
+    post:
+      tags:
+        - user
+      summary: Log user out of system
+      description: ''
+      operationId: Logout
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwODU5MDE2MH0.hXi8SquqppffVDzXEkvCwXd9Una8YcatsG1H-BlcRWw'
+        required: true
+      responses:
+        default:
+          description: Logout Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successfully
+
+  ####### Forgot password #######
+  /users/forgot-password:
+    post:
+      tags:
+        - user
+      summary: Forgot password
+      description: 'Send email (include forgot password token) to user for verifying valid user'
+      operationId: Forgot password
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'thanh042@gmail.com'
+        required: true
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Check email to reset password
+                  forgot_password_token:
+                    type: string
+                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWI2NWExZWE4MTVhMWZkNWZjZjRmIiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3MDAwMjMyNDMsImV4cCI6MTcwMDYyODA0M30.fiWUOgl9rYEH9Ol5O883LiMJ7vBKXOEPr_weFrqtE0I'
+
+  ####### Verify forgot password token #######
+  /users/verify-forgot-password:
+    post:
+      tags:
+        - user
+      summary: Verify forgot password token
+      description: 'verify forgot password token. If token is valid, start to reset password'
+      operationId: Verify forgot password token
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_password_token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWI2NWExZWE4MTVhMWZkNWZjZjRmIiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3MDAwMjMyNDMsImV4cCI6MTcwMDYyODA0M30.fiWUOgl9rYEH9Ol5O883LiMJ7vBKXOEPr_weFrqtE0I'
+        required: true
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verify forgot password successfully
+    ####### Reset password #######
+  /users/reset-password:
+    post:
+      tags:
+        - user
+      summary: Reset password
+      description: 'Reset password after verify forgot password token'
+      operationId: ReserPassword
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                forgot_password_token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWI2NWExZWE4MTVhMWZkNWZjZjRmIiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3MDAwMjMyNDMsImV4cCI6MTcwMDYyODA0M30.fiWUOgl9rYEH9Ol5O883LiMJ7vBKXOEPr_weFrqtE0I'
+                password:
+                  type: string
+                  example: newpassword123
+                confirm_password:
+                  type: string
+                  example: newpassword123
+        required: true
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Reset password successfully
+
+    ####### Change password #######
+  /users/change-password:
+    post:
+      tags:
+        - user
+      summary: Change password
+      description: Change password
+      operationId: ChangePassword
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  example: 123123
+                password:
+                  type: string
+                  example: 123123123
+                confirm_password:
+                  type: string
+                  example: 123123123
+        required: true
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Change password successfully
+    ####### Get my profile #######
+  /users/me:
+    get:
+      tags:
+        - user
+      summary: Get my profile
+      description: ''
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bio:
+                  type: string
+                  example: 'This is Bio'
+                name:
+                  type: string
+                  example: 'Thanh002'
+                location:
+                  type: string
+                  example: 'TPHCM'
+                username:
+                  type: string
+                  example: 'Tonionn2112'
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update me successfully
+                $ref: '#/components/schemas/UserProfile'
+    ####### Update my profile #######
+    patch:
+      tags:
+        - user
+      summary: Update my profile
+      description: ''
+      operationId: updateMe
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: Get my successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update my profile successfully
+                $ref: '#/components/schemas/UserProfile'
+      ####### Get user profile #######
+  /users/{username}:
+    get:
+      tags:
+        - user
+      summary: Get user profile
+      description: ''
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          description: ''
+          name: username
+          required: true
+          schema:
+            type: string
+            example: Tonionn2111
+      responses:
+        default:
+          description: Get user profile successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Update me successfully
+                $ref: '#/components/schemas/UserProfile'
+    ####### Follow user #######
+  /users/follow:
+    post:
+      tags:
+        - user
+      summary: Follow user
+      description: ''
+      operationId: Follow User
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                followed_user_id:
+                  type: string
+                  format: MongoId
+                  example: '652ac72c5873157e65e26868'
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Follow User successfully
+    ####### Unfollow user #######
+  /users/follow/{user_id}:
+    delete:
+      tags:
+        - user
+      summary: Unfollow user
+      description: ''
+      operationId: Unfollow User
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 652ac72c5873157e65e26868
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfollow User successfully
+    ####### Create new tweet #######
+  /tweets/create-tweet:
+    post:
+      tags:
+        - tweet
+      summary: Create a new tweet
+      description: ''
+      operationId: CreateTweet
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTweetBody'
+        required: true
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Tweet created
+                  result:
+                    $ref: '#/components/schemas/CreateTweetResponse'
+
+  ####### Get tweet detail #######
+  /tweets/{tweet_id}:
+    get:
+      tags:
+        - tweet
+      summary: Get tweet detail
+      description: ''
+      operationId: GetTweet
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: tweet_id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 6538d80d5a8259a00c9fc492
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get tweet successfully
+                  result:
+                    $ref: '#/components/schemas/GetTweetDetailsResponse'
+
+  ####### Like tweet #######
+  /tweets/like-tweet:
+    post:
+      tags:
+        - tweet
+      summary: Like tweet
+      description: ''
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet_id:
+                  type: string
+                  format: MongoId
+                  example: '6538d80d5a8259a00c9fc492'
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Like tweet successfully
+    ####### Unlike tweet #######
+  /tweets/like-tweet/tweet/{tweet_id}:
+    delete:
+      tags:
+        - tweet
+      summary: Unlike tweet
+      description: ''
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: tweet_id
+          required: true
+          schema:
+            type: string
+            format: MongoId
+            example: 6538d80d5a8259a00c9fc492
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unlike tweet successfully
+
+    ####### Get news feed #######
+  /tweets?limit=20&page=1:
+    get:
+      tags:
+        - tweet
+      summary: Get news feed
+      description: ''
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of tweet to return
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The number of page
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get new feeds successfully
+                  result:
+                    $ref: '#/components/schemas/GetNewsFeedResponse'
+
+components:
+  schemas:
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: thanh038@gmail.com
+        password:
+          type: string
+          example: 123123
+        confirm_password:
+          type: string
+          example: 123123
+        name:
+          type: string
+          example: Thanh13Oct
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: 2023-09-27T15:51:28.772+00:00
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: thanh042@gmail.com
+        password:
+          type: string
+          example: 123123
+    RegisterSuccess:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwMDU1NDk2MH0.TLbx92b5EGxQe-7cc0Sh7C-zeqhXzo6bFZL99CLZDF8
+            refresh_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwODU5MDE2MH0.hXi8SquqppffVDzXEkvCwXd9Una8YcatsG1H-BlcRWw
+    LoginSuccess:
+      type: object
+      properties:
+        result:
+          type: object
+          properties:
+            access_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwMDU1NDk2MH0.TLbx92b5EGxQe-7cc0Sh7C-zeqhXzo6bFZL99CLZDF8
+            refresh_token:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjUyYWM3MmM1ODczMTU3ZTY1ZTI2ODY4IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE2OTk5NTAxNjAsImV4cCI6MTcwODU5MDE2MH0.hXi8SquqppffVDzXEkvCwXd9Una8YcatsG1H-BlcRWw
+    UserProfile:
+      type: 'object'
+      properties:
+        _id:
+          type: 'string'
+          format: MongoId
+          example: '65533f87da126e68ddc52e8a'
+        email:
+          type: 'string'
+          example: 'thanh038@gmail.com'
+        name:
+          type: 'string'
+          example: 'Thanh1234'
+        date_of_birth:
+          type: 'string'
+          format: ISO8601
+          example: 2023-09-27T15:51:28.772Z
+        created_at:
+          type: 'string'
+          format: ISO8601
+          example: 2023-11-14T09:36:07.538Z
+        updated_at:
+          type: 'string'
+          format: ISO8601
+          example: 2023-11-14T09:36:07.538Z
+        verify:
+          $ref: '#/components/schemas/UserVerify'
+        bio:
+          type: 'string'
+          example: ''
+        location:
+          type: 'string'
+          example: ''
+        website:
+          type: 'string'
+          example: ''
+        username:
+          type: 'string'
+          example: 'user65533f87da126e68ddc52e8a'
+        avatar:
+          type: 'string'
+          example: ''
+        cover_photo:
+          type: 'string'
+          example: ''
+    UserVerify:
+      type: number
+      enum: [Unverified, Verified, Banned]
+      example: 1
+    CreateTweetBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TweetType'
+        content:
+          type: string
+          example: 'Content of the request body'
+        parent_id:
+          type: string
+          format: MongoId
+          example: ''
+        hashtags:
+          type: array
+          items:
+            type: string
+          example: []
+        mentions:
+          type: array
+          items:
+            type: string
+          example: []
+        medias:
+          type: array
+          items:
+            type: string
+          example: []
+    TweetType:
+      type: number
+      enum: [Tweet, Retweet, Comment, QuoteTweet]
+      example: 0
+    CreateTweetResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '6554997106124413b45b3ad5'
+        user_id:
+          type: string
+          example: '65548831c32058445b375eff'
+        type:
+          type: number
+          example: 2
+        audience:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: []
+        content:
+          type: string
+          example: 'Content of Tweet'
+        parent_id:
+          type: string
+          format: MongoId
+          example: ''
+        hashtags:
+          type: array
+          example: []
+        mentions:
+          type: array
+          example: []
+        medias:
+          type: array
+          example: []
+        guest_views:
+          type: number
+          example: 0
+        user_views:
+          type: number
+          example: 0
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2023-11-15T10:12:01.909Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2023-11-15T10:12:01.909Z'
+    GetTweetDetailsResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '6538d80d5a8259a00c9fc492'
+        user_id:
+          type: string
+          example: '652ac72c5873157e65e26868'
+        type:
+          type: integer
+          example: 0
+        audience:
+          type: integer
+          example: 1
+        content:
+          type: string
+          example: 'Hell04'
+        parent_id:
+          type: string
+          format: MongoId
+          example: null
+        medias:
+          type: array
+          example: []
+        guest_views:
+          type: integer
+          example: 1
+        user_views:
+          type: integer
+          example: 6
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2023-10-25T08:55:41.909Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2023-11-03T04:10:45.848Z'
+        hashtags:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                format: MongoId
+                example: '6538d46610ba8aeb049b34e4'
+              name:
+                type: string
+                example: 'javascript'
+              created_at:
+                type: string
+                format: ISO8601
+                example: '2023-10-25T08:40:06.433Z'
+        mentions:
+          type: array
+          items:
+            type: string
+          example: []
+        bookmarks:
+          type: number
+          example: 1
+        likes:
+          type: number
+          example: 2
+        retweet_count:
+          type: number
+          example: 1
+        comment_count:
+          type: number
+          example: 10
+        quote_count:
+          type: number
+          example: 1
+        views:
+          type: number
+          example: 7
+    GetNewsFeedResponse:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: '6540a47eedcb9dfc562bcaa3'
+              user_id:
+                type: string
+                example: '6540a47cedcb9dfc562bc9db'
+              type:
+                type: integer
+                example: 0
+              audience:
+                type: integer
+                example: 0
+              content:
+                type: string
+                example: 'Colo curatio deprimo surgo vitiosus correptius illo versus. Culpo adulatio peccatus...'
+              parent_id:
+                type: array
+                example: null
+              hashtags:
+                type: array
+                items: {}
+                example: []
+              mentions:
+                type: array
+                items:
+                  type: string
+                example: []
+              medias:
+                type: array
+                items: {}
+                example: []
+              guest_views:
+                type: integer
+                example: 0
+              user_views:
+                type: integer
+                example: 4
+              created_at:
+                type: string
+                format: date-time
+                example: '2023-10-31T06:53:50.587Z'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2023-11-15T14:59:57.909Z'
+              users:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: '6540a47cedcb9dfc562bc9db'
+                  email:
+                    type: string
+                    example: 'Elton_Breitenberg@gmail.com'
+                  name:
+                    type: string
+                    example: 'Dimitri_Kreiger'
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: '2023-10-31T06:53:48.569Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: '2023-10-31T06:53:48.569Z'
+                  verify:
+                    type: integer
+                    example: 1
+                  bio:
+                    type: string
+                    example: ''
+                  location:
+                    type: string
+                    example: ''
+                  website:
+                    type: string
+                    example: ''
+                  username:
+                    type: string
+                    example: 'user6540a47cedcb9dfc562bc9db'
+                  avatar:
+                    type: string
+                    example: ''
+                  cover_photo:
+                    type: string
+                    example: ''
+              bookmarks:
+                type: integer
+                example: 0
+              likes:
+                type: integer
+                example: 0
+              retweet_count:
+                type: integer
+                example: 0
+              comment_count:
+                type: integer
+                example: 0
+              quote_count:
+                type: integer
+                example: 0
+              views:
+                type: integer
+                example: 3
+        limit:
+          type: integer
+          example: 2
+        page:
+          type: integer
+          example: 1
+        total_tweets:
+          type: integer
+          example: 613
+        total_page:
+          type: integer
+          example: 307
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
